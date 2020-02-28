@@ -1,12 +1,14 @@
+import java.util.ArrayList;
+
 /**
  * @author Kyle Balthazor
  * Class Id: 186
- * Assignment 1: Simple List and introduction to Javadoc and Junit Tests
+ * Assignment 2: Simple Changes to test Push and Pull for Git 
  */
 
 public class SimpleList
 {
-	private int[] List; 
+	private ArrayList<Integer> List; 
 	private int count;
 	
 	/**
@@ -16,7 +18,7 @@ public class SimpleList
 	
 	public SimpleList() 
 	{
-		this.List = new int[10];
+		this.List = new ArrayList<Integer>(10);
 		this.count = 0;
 	}
 	
@@ -32,7 +34,7 @@ public class SimpleList
 		{
 			if (this.count == 0) 
 			{  // If it is the first Number in the array just add the number.
-				this.List[0] = newInteger;
+				this.List.add(newInteger);
 				this.count++;
 			}
 			else 
@@ -42,27 +44,33 @@ public class SimpleList
 				this.count++;
 				for (int index = 1; index < count; index++) 
 				{
-					holderArray[index] = this.List[index-1];
+					holderArray[index] = this.List.get(index-1);
 				}
-				this.List = holderArray;
+				this.List.clear();
+				for(int position = 0; position < holderArray.length; position++)
+				{
+					this.List.set(position, holderArray[position]);
+				}
 			}
 		}
 		else 
 		{
+			this.count++;
+			this.List.ensureCapacity((this.List.size()/2)+this.List.size());
+			
 			int holderArray[] = new int[count];
 			holderArray[0] = newInteger;
+			
 			for (int index = 1; index < count; index++) 
 			{
-				if (index == 10) 
-				{
-					//Do Nothing
-				}
-				else 
-				{
-				holderArray[index] = this.List[index-1];
-				}
+				holderArray[index] = this.List.get(index-1);
 			}
-			this.List = holderArray;
+			
+			this.List.clear();
+			for(int position = 0; position < holderArray.length; position++)
+			{
+				this.List.set(position, holderArray[position]);
+			}
 		}
 	}
 	
@@ -77,17 +85,16 @@ public class SimpleList
 		int returnIndex = -1;
 		if (this.count != 0) 
 		{
-			
 			for (int index = 0; index < this.count; index++) 
 			{
-				if (this.List[index] == removeValue) 
+				if (this.List.get(index) == removeValue) 
 					returnIndex = index;
 			}
 			if (returnIndex != -1) 
 			{
 				if(this.count == 1) 
 				{
-					this.List = new int[10];
+					this.List = new ArrayList<Integer>(10);
 					this.count--;
 				}
 				else 
@@ -96,8 +103,28 @@ public class SimpleList
 					System.arraycopy(List, 0, holderArray, 0, returnIndex);
 					System.arraycopy(List, returnIndex+1 , holderArray, returnIndex, this.count-returnIndex-1);
 					this.count--;
-					this.List = holderArray;
+					for(int position = 0; position < holderArray.length; position++)
+					{
+						this.List.set(position, holderArray[position]);
+					}
 				}
+			}
+			
+			int numberNull = 0;
+			for(int index = 0; index < this.count; index++)
+			{
+				if(this.List.get(index) == null)
+				{
+					numberNull++;
+				}
+			}
+			if(numberNull >= this.List.size()*.25 && numberNull != this.count)
+			{
+				this.List.trimToSize();
+			}
+			else if (numberNull >= this.List.size()*.25 && numberNull == this.count)
+			{
+				this.List = new ArrayList<Integer>(1);
 			}
 		}
 	}
@@ -124,7 +151,7 @@ public class SimpleList
 		int returnIndex = -1;
 		for (int index = 0; index < this.count; index++) 
 		{
-			if (this.List[index] == searchValue) 
+			if (this.List.get(index) == searchValue) 
 				returnIndex = index;
 		}
 	return returnIndex;		
@@ -140,10 +167,10 @@ public class SimpleList
 		String returnString = "";
 		if (this.count != 0) 
 		{
-			returnString = "" + this.List[0];
+			returnString = "" + this.List.get(0);
 			for (int index = 1; index < this.count; index++) 
 			{
-				returnString += " " + this.List[index];
+				returnString += " " + this.List.get(index);
 			}
 		}
 		
@@ -155,12 +182,22 @@ public class SimpleList
 		SimpleList newList = new SimpleList();
 		
 		newList.add(4);
+		newList.add(4);
+		newList.add(4);
+		newList.add(4);
+		newList.add(4);
+		newList.add(4);
+		newList.add(4);
+		newList.add(4);
+		newList.add(4);
+		newList.add(4);
+		newList.add(4);
+		newList.add(4);
+		newList.add(4);
 		newList.remove(4);
 		newList.add(7);
 		
-		
 		System.out.println(newList.toString());
-		
 
 	}
 }
